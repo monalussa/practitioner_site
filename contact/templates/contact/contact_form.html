@@ -1,0 +1,13 @@
+<form class="contact-form" method="post" action="{% url 'contact:contact' %}">
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="form-group {% if field.errors %}form-group--error{% endif %}">
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    {{ field }}
+    {% for error in field.errors %}
+      <span class="form-error">{{ error }}</span>
+    {% endfor %}
+  </div>
+  {% endfor %}
+  <button type="submit" class="btn btn--primary">Send message</button>
+</form>

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block content %}
+<section class="page-content section">
+  <div class="container container--narrow">
+    <h1>{{ page.title }}</h1>
+    {% if page.intro %}{{ page.intro|richtext }}{% endif %}
+
+    {% if page.booking_url %}
+      {% if page.embed_booking %}
+      <div class="booking-embed">
+        <iframe
+          src="{{ page.booking_url }}"
+          title="Book an appointment"
+          width="100%"
+          height="800"
+          frameborder="0"
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+      {% else %}
+      <div class="booking-link-box">
+        <a href="{{ page.booking_url }}" class="btn btn--primary btn--large" target="_blank" rel="noopener">
+          Choose a date and time
+        </a>
+      </div>
+      {% endif %}
+    {% else %}
+    <p>Booking is coming soon. In the meantime, <a href="/contact/">send me a message</a>.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

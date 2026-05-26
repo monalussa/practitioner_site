@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags wagtailcore_tags %}
+
+{% block schema_org %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "{{ SITE_NAME }}",
+  "url": "{{ request.scheme }}://{{ request.get_host }}",
+  "description": "{{ page.search_description }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+{# ── 1. HERO ─────────────────────────────────────────────────────────── #}
+<section class="hero">
+  {% if page.hero_image %}
+    {% image page.hero_image fill-1440x760 as hero_img %}
+    <img class="hero__bg" src="{{ hero_img.url }}" alt="" loading="eager">
+  {% endif %}
+  <div class="hero__overlay"></div>
+  <div class="hero__text">
+    <h1>{{ page.hero_title }}</h1>
+    {% if page.hero_subtitle %}<p class="hero__subtitle">{{ page.hero_subtitle }}</p>{% endif %}
+    <a href="/booking/" class="btn btn--outline btn--large">Book a free discovery call</a>
+  </div>
+</section>
+
+{# ── 2. INTRO STRIP ──────────────────────────────────────────────────── #}
+{% if page.intro %}
+<div class="intro-strip">
+  <div class="container container--narrow">
+    {{ page.intro|richtext }}
+  </div>
+</div>
+{% endif %}
+
+{# ── 3. HOW I WORK (feature blocks) ─────────────────────────────────── #}
+{% with features=page.get_features %}
+{% if features %}
+<section class="section section--sand">
+  <div class="container">
+    <h2 class="section-heading" style="display:block;text-align:center;margin:0 auto .5rem">How I Work</h2>
+    <p class="section-intro text-center" style="text-align:center;margin:0 auto 0">
+      A simple, supportive process designed around you.
+    </p>
+    <div class="feature-grid">
+      {% for block in features %}{% include_block block %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endwith %}
+
+{# ── 4. WHAT PARENTS SAY (testimonial blocks) ────────────────────────── #}
+{% with testimonials=page.get_testimonials %}
+{% if testimonials %}
+<section class="section">
+  <div class="container">
+    <h2 class="section-heading">What Parents Say</h2>
+    <div class="testimonial-grid">
+      {% for block in testimonials %}{% include_block block %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endwith %}
+
+{# ── 5. FEATURED BLOG POSTS ──────────────────────────────────────────── #}
+{% with recent_posts=page.get_recent_posts %}
+{% if recent_posts %}
+<section class="section section--green-light">
+  <div class="container">
+    <h2 class="section-heading">From the Blog</h2>
+    <p class="section-intro">Insights and tools for your conscious parenting journey.</p>
+    <div class="post-grid">
+      {% for post in recent_posts %}
+      <a class="post-card" href="{{ post.url }}">
+        <div class="post-card__image">
+          {% if post.featured_image %}
+            {% image post.featured_image fill-600x300 as thumb %}
+            <img src="{{ thumb.url }}" alt="{{ post.featured_image.title }}" loading="lazy">
+          {% else %}
+          <div class="post-card__image--placeholder">🌿</div>
+          {% endif %}
+        </div>
+        <div class="post-card__body">
+          {% if post.published_date %}
+          <span class="post-card__meta">{{ post.published_date|date:"F j, Y" }}</span>
+          {% endif %}
+          <h3 class="post-card__title">{{ post.title }}</h3>
+          {% if post.excerpt %}<p class="post-card__excerpt">{{ post.excerpt }}</p>{% endif %}
+          <span class="post-card__link">Read more →</span>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-2">
+      <a href="/blog/" class="btn btn--secondary">See all articles</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endwith %}
+
+{# ── 6. FINAL CTA BAND ───────────────────────────────────────────────── #}
+<section class="cta-section">
+  <div class="container">
+    <h2>Ready to parent with more intention?</h2>
+    <p>Book a free 30-minute discovery call and let's talk about what's possible for your family.</p>
+    <a href="/booking/" class="btn btn--outline btn--large">Book a free discovery call</a>
+  </div>
+</section>
+
+{% endblock %}

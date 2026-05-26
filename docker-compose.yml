@@ -1,0 +1,27 @@
+services:
+  easyappointments:
+    build: docker/easyappointments
+    ports:
+      - "9090:80"
+    volumes:
+      - ./booking:/var/www/html
+    env_file: .env.booking
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    env_file: .env.booking
+    volumes:
+      - ea_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  ea_mysql_data:

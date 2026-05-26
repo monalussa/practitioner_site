@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load wagtailimages_tags wagtailcore_tags %}
+
+{% block schema_org %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ page.title }}",
+  "description": "{{ page.search_description|default:page.excerpt }}",
+  {% if page.featured_image %}
+  {% image page.featured_image width-1200 as og_img %}
+  "image": "{{ request.scheme }}://{{ request.get_host }}{{ og_img.url }}",
+  {% endif %}
+  {% if page.published_date %}
+  "datePublished": "{{ page.published_date|date:'c' }}",
+  "dateModified": "{{ page.last_published_at|date:'c' }}",
+  {% endif %}
+  "author": {
+    "@type": "Person",
+    "name": "{{ SITE_NAME }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ SITE_NAME }}"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="page-content section">
+  <div class="container container--narrow">
+    <header class="post-header">
+      <h1>{{ page.title }}</h1>
+      {% if page.published_date %}
+      <time datetime="{{ page.published_date|date:'Y-m-d' }}">{{ page.published_date|date:"F j, Y" }}</time>
+      {% endif %}
+    </header>
+
+    {% if page.featured_image %}
+      {% image page.featured_image width-900 as hero %}
+      <img class="post-featured-img" src="{{ hero.url }}" alt="{{ page.featured_image.title }}" loading="eager">
+    {% endif %}
+
+    <div class="post-body">
+      {% include_block page.body %}
+    </div>
+
+    <div class="post-footer">
+      <a href="/blog/" class="back-link">&larr; All posts</a>
+      <a href="/booking/" class="btn btn--primary">Book a session</a>
+    </div>
+  </div>
+</article>
+{% endblock %}

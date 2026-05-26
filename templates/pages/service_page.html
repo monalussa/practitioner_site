@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags %}
+
+{% block schema_org %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "{{ page.title }}",
+  "description": "{{ page.search_description|default:page.tagline }}",
+  "provider": {
+    "@type": "ProfessionalService",
+    "name": "{{ SITE_NAME }}",
+    "url": "{{ request.scheme }}://{{ request.get_host }}"
+  }
+  {% if page.price_display %}
+  ,"offers": {
+    "@type": "Offer",
+    "description": "{{ page.price_display }}"
+  }
+  {% endif %}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="page-content section">
+  <div class="container container--narrow">
+    <h1>{{ page.title }}</h1>
+    {% if page.tagline %}<p class="tagline">{{ page.tagline }}</p>{% endif %}
+
+    {% if page.duration or page.price_display %}
+    <div class="service-meta">
+      {% if page.duration %}<span>{{ page.duration }}</span>{% endif %}
+      {% if page.price_display %}<span>{{ page.price_display }}</span>{% endif %}
+    </div>
+    {% endif %}
+
+    {% include_block page.body %}
+
+    {% if page.cta_url %}
+    <div class="cta-box">
+      <a href="{{ page.cta_url }}" class="btn btn--primary">{{ page.cta_text }}</a>
+    </div>
+    {% endif %}
+  </div>
+</article>
+{% endblock %}

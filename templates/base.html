@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  {% block seo %}{% endblock %}
+
+  <title>{% block title %}{% if page %}{{ page.seo_title|default:page.title }}{% endif %}{% endblock %} | {{ SITE_NAME }}</title>
+  <meta name="description" content="{% block meta_description %}{% if page %}{{ page.search_description }}{% endif %}{% endblock %}">
+
+  <link rel="stylesheet" href="/static/css/main.css">
+
+  {% block schema_org %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "{{ SITE_NAME }}",
+    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "sameAs": []
+  }
+  </script>
+  {% endblock %}
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="/" class="nav__logo">{{ SITE_NAME }}</a>
+    <ul class="nav__links">
+      <li><a href="/about/">About</a></li>
+      <li><a href="/services/">Services</a></li>
+      <li><a href="/blog/">Blog</a></li>
+      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/booking/" class="nav__cta">Book a session</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="footer__inner">
+    <p>&copy; {% now "Y" %} {{ SITE_NAME }}. All rights reserved.</p>
+    <nav class="footer__links">
+      <a href="/privacy/">Privacy Policy</a>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
