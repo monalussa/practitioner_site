@@ -1,4 +1,4 @@
-# Conscious Parenting Coach — Website
+# Coach Website
 
 A coaching website with CMS-managed content and an integrated online booking system.
 
