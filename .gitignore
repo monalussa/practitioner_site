@@ -1,0 +1,17 @@
+# Django
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+db.sqlite3
+staticfiles/
+media/
+*.log
+.DS_Store
+
+# Easy!Appointments secrets (generated at runtime from env)
+.env.booking
+.env.booking.prod
+easyappointments-1.5.2/config.php

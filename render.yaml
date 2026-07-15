@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: practitioner-site
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings.production
+      - key: DEBUG
+        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.12.4"
+      - key: SECRET_KEY
+        generateValue: true
+      # Comma-separated. Set to your <app>.onrender.com host (and custom domain).
+      - key: ALLOWED_HOSTS
+        sync: false
+      # Comma-separated, https:// scheme required, e.g. https://<app>.onrender.com
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: WAGTAILADMIN_BASE_URL
+        sync: false
+      # Optional Wagtail admin bootstrap (set all three, or none).
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
+        sync: false
